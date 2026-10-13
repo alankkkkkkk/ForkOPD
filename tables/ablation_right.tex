@@ -1,0 +1,12 @@
+\multirow{3}{*}{\textit{Predictor}} & plain view only (no $c$) & 20.40 & \textcolor{black!55}{\scriptsize $-$1.84} \\
+ & evidence features only & 21.20 & \textcolor{black!55}{\scriptsize $-$1.04} \\
+ & $\pi_{\mathrm{ref}}$ instead of $\pi_{\mathrm{old}}$ & 20.70 & \textcolor{black!55}{\scriptsize $-$1.54} \\
+\midrule
+\multirow{3}{*}{\textit{Estimator}} & no cross-fitting & 21.40 & \textcolor{black!55}{\scriptsize $-$0.84} \\
+ & fixed 256-token windows & 21.70 & \textcolor{black!55}{\scriptsize $-$0.54} \\
+ & non-causal segmentation & 22.10 & \textcolor{black!55}{\scriptsize $-$0.14} \\
+\midrule
+\multirow{4}{*}{\textit{Budget}} & $B{=}0.5$ & 21.30 & \textcolor{black!55}{\scriptsize $-$0.94} \\
+ & $B{=}2$ ($1.5\times$ tokens) & 22.60 & \textcolor{black!55}{\scriptsize $+$0.36} \\
+ & $M{=}1$, $B{=}2$ & 21.70 & \textcolor{black!55}{\scriptsize $-$0.54} \\
+ & $M{=}4$, $B{=}0.5$ & 22.30 & \textcolor{black!55}{\scriptsize $+$0.06} \\

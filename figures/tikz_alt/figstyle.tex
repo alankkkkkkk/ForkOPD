@@ -1,0 +1,175 @@
+% Shared visual language for Figures 1 and 2 (flat illustration style, serif labels).
+\usetikzlibrary{arrows.meta,calc,positioning,shadows.blur,decorations.pathreplacing,backgrounds,fit}
+
+% ---------------------------------------------------------------- palette (shared with Figure 2)
+% Light, low-saturation fills; hairline frames in the same hue; one semantic colour per role.
+\definecolor{ink}{HTML}{263040}
+\definecolor{ink2}{HTML}{667085}
+\definecolor{icon}{HTML}{4B5565}     % icon strokes
+\definecolor{line}{HTML}{D0D7E2}
+\definecolor{paper}{HTML}{FFFFFF}
+\definecolor{bookcov}{HTML}{A9B9CF}
+% panel families (frame / header band / body): white panels, grey hairline frames
+\definecolor{pblue}{HTML}{D3D9E2}      \definecolor{pbluehead}{HTML}{FFFFFF}   \definecolor{pbluebg}{HTML}{FFFFFF}
+\definecolor{porange}{HTML}{D3D9E2}    \definecolor{porangehead}{HTML}{FFFFFF} \definecolor{porangebg}{HTML}{FFFFFF}
+\definecolor{pmist}{HTML}{D3D9E2}      \definecolor{pmisthead}{HTML}{FFFFFF}   \definecolor{pmistbg}{HTML}{FFFFFF}
+% semantic accents
+\definecolor{hind}{HTML}{3D7FD9}     % teacher prediction f_k (blue)
+\definecolor{hindbg}{HTML}{E6F0FC}
+\definecolor{sage}{HTML}{7B68D6}     % verified forks, Y-hat (lavender)
+\definecolor{sagebg}{HTML}{F4F2FD}
+\definecolor{sagecard}{HTML}{ECE8FB}
+\definecolor{ok}{HTML}{3D7FD9}       % verified success (blue)
+\definecolor{bad}{HTML}{E06C5F}      % failure, slip, blame (coral)
+\definecolor{badbg}{HTML}{FDECEA}
+\definecolor{gold}{HTML}{F2B27A}     % agreement highlight (apricot)
+\definecolor{ours}{HTML}{E8894A}     % credit / update accent (apricot)
+% credit bars, same tints as the tokens of Figure 2
+\definecolor{tokbluetop}{HTML}{DCEAFB} \definecolor{tokbluebot}{HTML}{BCD6F5} \definecolor{tokblueln}{HTML}{6F9BD8}
+\definecolor{tokredtop}{HTML}{FBDAD5}  \definecolor{tokredbot}{HTML}{F4B5AC}  \definecolor{tokredln}{HTML}{D9685C}
+\colorlet{coral}{pmist}\colorlet{coralbg}{pmistbg}\colorlet{coralcard}{white}
+
+\tikzset{
+  >={Stealth[length=4.2pt,width=3.6pt]},
+  base/.style={font=\fontsize{7.3}{8.8}\selectfont, text=ink},
+  arr/.style={->, line width=0.75pt, draw=ink},
+  arrsoft/.style={->, line width=0.7pt, draw=ink2},
+  card/.style={rounded corners=4pt, line width=0.55pt},
+  chip/.style={rounded corners=2.5pt, line width=0.65pt, minimum height=0.46cm, minimum width=0.62cm, inner sep=1.5pt, font=\fontsize{7.6}{9}\selectfont},
+  lab/.style={font=\fontsize{7.3}{8.6}\selectfont, text=ink, align=center},
+  small/.style={font=\fontsize{6.7}{7.8}\selectfont, text=ink2, align=center},
+  ttl/.style={font=\fontsize{7.8}{9.2}\selectfont\bfseries, text=ink, align=left},
+  % ------------------------------------------------------------ icons
+  doc/.pic={
+    \draw[icon, fill=paper, line width=0.65pt, line join=round]
+      (-0.32,-0.42) -- (0.32,-0.42) -- (0.32,0.28) -- (0.18,0.42) -- (-0.32,0.42) -- cycle;
+    \draw[icon, line width=0.6pt, line join=round] (0.18,0.42) -- (0.18,0.28) -- (0.32,0.28);
+    \foreach \y in {0.17,0.04,-0.09,-0.22} \draw[icon!40, line width=0.6pt, line cap=round] (-0.2,\y) -- (0.19,\y);
+  },
+  % a document whose third line carries a slip (wrong turn)
+  docslip/.pic={
+    \draw[icon, fill=paper, line width=0.65pt, line join=round]
+      (-0.32,-0.42) -- (0.32,-0.42) -- (0.32,0.28) -- (0.18,0.42) -- (-0.32,0.42) -- cycle;
+    \draw[icon, line width=0.6pt, line join=round] (0.18,0.42) -- (0.18,0.28) -- (0.32,0.28);
+    \foreach \y in {0.17,0.04,-0.22} \draw[icon!40, line width=0.6pt, line cap=round] (-0.2,\y) -- (0.19,\y);
+    \draw[bad, line width=1.1pt, line cap=round] (-0.2,-0.09) -- (0.19,-0.09);
+    \draw[bad, line width=1.0pt, line cap=round] (0.05,-0.02) -- (0.24,0.22);
+  },
+  % a document with highlighted (reference-like) lines
+  dochl/.pic={
+    \draw[icon, fill=paper, line width=0.65pt, line join=round] (-0.32,-0.42) -- (0.32,-0.42) -- (0.32,0.28) -- (0.18,0.42) -- (-0.32,0.42) -- cycle;
+    \draw[icon, line width=0.6pt, line join=round] (0.18,0.42) -- (0.18,0.28) -- (0.32,0.28);
+    \fill[gold!45] (-0.23,0.11) rectangle (0.22,0.23);
+    \fill[gold!45] (-0.23,-0.02) rectangle (0.22,0.10);
+    \foreach \y in {0.17,0.04,-0.09,-0.22} \draw[icon!40, line width=0.6pt, line cap=round] (-0.2,\y) -- (0.19,\y);
+  },
+  book/.pic={
+    \fill[bookcov, rounded corners=1pt] (-0.62,-0.34) -- (0,-0.40) -- (0.62,-0.34) -- (0.62,0.30) -- (0,0.24) -- (-0.62,0.30) -- cycle;
+    \draw[icon, fill=paper, line width=0.65pt, line join=round] (-0.58,0.36) .. controls (-0.3,0.40) and (-0.12,0.36) .. (0,0.28) -- (0,-0.32) .. controls (-0.12,-0.25) and (-0.3,-0.22) .. (-0.58,-0.26) -- cycle;
+    \draw[icon, fill=paper, line width=0.65pt, line join=round] (0.58,0.36) .. controls (0.3,0.40) and (0.12,0.36) .. (0,0.28) -- (0,-0.32) .. controls (0.12,-0.25) and (0.3,-0.22) .. (0.58,-0.26) -- cycle;
+    \foreach \y in {0.18,0.06,-0.06,-0.16} {
+      \draw[icon!40, line width=0.55pt, line cap=round] (-0.48,\y+0.03) .. controls (-0.3,\y+0.05) .. (-0.1,\y);
+      \draw[icon!40, line width=0.55pt, line cap=round] (0.48,\y+0.03) .. controls (0.3,\y+0.05) .. (0.1,\y);
+    }
+  },
+  clipboard/.pic={
+    \draw[icon, fill=paper, line width=0.7pt, rounded corners=2pt] (-0.34,-0.45) rectangle (0.34,0.38);
+    \draw[icon, fill=icon!55, line width=0.6pt, rounded corners=1.5pt] (-0.15,0.31) rectangle (0.15,0.46);
+    \fill[icon!55] (0,0.49) circle (0.045);
+  },
+  xmark/.pic={\draw[bad, line width=1.6pt, line cap=round] (-0.15,-0.15) -- (0.15,0.15) (-0.15,0.15) -- (0.15,-0.15);},
+  badx/.pic={\fill[bad] (0,0) circle (0.15); \draw[white, line width=1.1pt, line cap=round] (-0.065,-0.065) -- (0.065,0.065) (-0.065,0.065) -- (0.065,-0.065);},
+  badok/.pic={\fill[ok] (0,0) circle (0.15); \draw[white, line width=1.1pt, line cap=round, line join=round] (-0.075,0.0) -- (-0.02,-0.06) -- (0.08,0.07);},
+  magnifier/.pic={
+    \draw[icon, line width=1.6pt, line cap=round] (0.15,-0.15) -- (0.36,-0.36);
+    \draw[icon, fill=hindbg, fill opacity=0.85, line width=0.9pt] (0,0) circle (0.21);
+  },
+  eye/.pic={
+    \draw[icon, fill=paper, line width=0.7pt] (-0.36,0) .. controls (-0.14,0.26) and (0.14,0.26) .. (0.36,0) .. controls (0.14,-0.26) and (-0.14,-0.26) .. (-0.36,0) -- cycle;
+    \fill[hind] (0,0) circle (0.12); \fill[icon] (0,0) circle (0.055); \fill[white] (0.035,0.04) circle (0.025);
+  },
+  dice/.pic={
+    \draw[icon, fill=paper, line width=0.7pt, rounded corners=2.5pt] (-0.22,-0.22) rectangle (0.22,0.22);
+    \foreach \p in {(-0.11,0.11),(0.11,-0.11),(0,0),(-0.11,-0.11),(0.11,0.11)} \fill[icon] \p circle (0.035);
+  },
+  snow/.pic={
+    \foreach \a in {0,60,120} \draw[white, line width=0.9pt, line cap=round] (\a:0.16) -- (\a+180:0.16);
+    \foreach \a in {0,60,...,300} \draw[white, line width=0.6pt, line cap=round] (\a:0.1) -- ++(\a+40:0.05) (\a:0.1) -- ++(\a-40:0.05);
+  },
+  robot/.pic={
+    \draw[icon, line width=0.7pt] (0,0.52) -- (0,0.66); \fill[ours] (0,0.69) circle (0.06);
+    \draw[icon, fill=paper, line width=0.75pt, rounded corners=4pt] (-0.40,0.05) rectangle (0.40,0.54);
+    \draw[icon, fill=paper, line width=0.6pt, rounded corners=1pt] (-0.47,0.20) rectangle (-0.40,0.38) (0.40,0.20) rectangle (0.47,0.38);
+    \fill[icon] (-0.15,0.31) circle (0.065) (0.15,0.31) circle (0.065);
+    \draw[icon, line width=0.6pt, line cap=round] (-0.1,0.15) -- (0.1,0.15);
+    \draw[icon, fill=tokblueln!75, line width=0.75pt, rounded corners=4pt] (-0.46,-0.52) rectangle (0.46,0.0);
+    \pic at (0,-0.26) {snow};
+  },
+  gauge/.pic={
+    \draw[line, line width=3.2pt] (180:0.38) arc (180:0:0.38);
+    \draw[sage!80, line width=3.2pt] (180:0.38) arc (180:115:0.38);
+    \draw[icon, line width=1.0pt, line cap=round] (0,0) -- (118:0.33);
+    \fill[icon] (0,0) circle (0.05);
+  },
+  slider/.pic={
+    \draw[line, line width=2.4pt, line cap=round] (0,0) -- (1.5,0);
+    \draw[ours, line width=2.4pt, line cap=round] (0,0) -- (1.2,0);
+    \draw[icon, fill=paper, line width=0.8pt] (1.2,0) circle (0.11);
+  },
+  scales/.pic={
+    \draw[icon, line width=0.8pt, line cap=round] (0,-0.32) -- (0,0.26) (-0.18,-0.32) -- (0.18,-0.32) (-0.38,0.2) -- (0.38,0.2);
+    \fill[icon] (0,0.29) circle (0.05);
+    \draw[icon, line width=0.55pt] (-0.38,0.2) -- (-0.5,-0.04) (-0.38,0.2) -- (-0.26,-0.04) (0.38,0.2) -- (0.26,-0.04) (0.38,0.2) -- (0.5,-0.04);
+    \draw[icon, fill=hindbg, line width=0.65pt] (-0.52,-0.04) arc (180:360:0.14);
+    \draw[icon, fill=sagecard, line width=0.65pt] (0.24,-0.04) arc (180:360:0.14);
+  },
+  refresh/.pic={
+    \draw[sage, line width=1.1pt, ->] (60:0.2) arc (60:330:0.2);
+  },
+}
+
+% panel in the style of Figure 2: hairline frame, light header band, dark bold title
+% #1 name, #2 frame colour (header colour is #2head), #3 body colour, #4 sw corner, #5 ne corner, #6 title
+\newcommand{\panel}[6]{%
+  \path[fill=#3, rounded corners=5pt] (#4) rectangle (#5);
+  \begin{scope}
+    \clip[rounded corners=5pt] (#4) rectangle (#5);
+    \fill[#2head] ($(#4|-#5)+(0,-0.56)$) rectangle (#5);
+    \draw[#2, line width=0.5pt] ($(#4|-#5)+(0,-0.56)$) -- ($(#5)+(0,-0.56)$);
+  \end{scope}
+  \draw[#2, line width=0.75pt, rounded corners=5pt] (#4) rectangle (#5);
+  \node[anchor=center, text=ink, font=\fontsize{8.4}{10}\selectfont\bfseries] at ($($(#4|-#5)!0.5!(#5)$)+(0,-0.28)$) {#6};
+}
+
+\tikzset{
+  calib/.pic={
+    \draw[icon, fill=paper, line width=0.7pt, rounded corners=2.5pt] (-0.36,-0.32) rectangle (0.36,0.32);
+    \foreach \y/\k in {0.16/0.12,0.0/-0.1,-0.16/0.06} {
+      \draw[line, line width=1.2pt, line cap=round] (-0.24,\y) -- (0.24,\y);
+      \fill[hind] (\k,\y) circle (0.055);
+    }
+  },
+  feats/.pic={
+    \foreach \x/\h [count=\i] in {-0.24/0.22,-0.12/0.36,0/0.15,0.12/0.3,0.24/0.2} \fill[hind!60, rounded corners=0.6pt] (\x-0.045,-0.2) rectangle (\x+0.045,-0.2+\h);
+    \draw[ink2, line width=0.5pt] (-0.32,-0.2) -- (0.32,-0.2);
+  },
+  fold/.pic={
+    \draw[icon, fill=paper, line width=0.6pt, rounded corners=1.5pt] (-0.2,-0.24) rectangle (0.2,0.24);
+    \foreach \y in {0.11,0.0,-0.11} \draw[icon!40, line width=0.5pt] (-0.12,\y) -- (0.12,\y);
+  },
+}
+
+\tikzset{
+  robotlive/.pic={
+    \draw[icon, line width=0.7pt] (0,0.52) -- (0,0.66); \fill[ours] (0,0.69) circle (0.06);
+    \draw[icon, fill=paper, line width=0.75pt, rounded corners=4pt] (-0.40,0.05) rectangle (0.40,0.54);
+    \draw[icon, fill=paper, line width=0.6pt, rounded corners=1pt] (-0.47,0.20) rectangle (-0.40,0.38) (0.40,0.20) rectangle (0.47,0.38);
+    \fill[icon] (-0.15,0.31) circle (0.065) (0.15,0.31) circle (0.065);
+    \draw[icon, line width=0.6pt, line cap=round] (-0.12,0.16) .. controls (-0.04,0.1) and (0.04,0.1) .. (0.12,0.16);
+    \draw[icon, fill=ours!55, line width=0.75pt, rounded corners=4pt] (-0.46,-0.52) rectangle (0.46,0.0);
+    \draw[white, line width=1.0pt, ->, >={Stealth[length=2.8pt,width=2.6pt]}] (60:0.15)++(0,-0.26) arc (60:330:0.15);
+  },
+  foldlab/.pic={
+    \draw[icon, fill=paper, line width=0.6pt, rounded corners=1.5pt] (-0.21,-0.25) rectangle (0.21,0.25);
+  },
+}
